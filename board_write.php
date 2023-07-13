@@ -6,6 +6,7 @@
     <title>Document</title>
 </head>
 <body>
+    <?php include ('topHeader.php'); ?>
     <h1>글쓰기</h1>
     
     <form method="post" action="./board_action.php">

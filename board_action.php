@@ -1,26 +1,19 @@
 <?php
-  error_reporting( E_ALL );
-  ini_set( "display_errors", 1 );
-// MySQL 데이터베이스 연결 설정
-$servername = "localhost";   // MySQL 서버 주소
-$username = "root";       // MySQL 사용자명
-$password = "0000";       // MySQL 비밀번호
-$dbname = "testdb";    // 사용할 데이터베이스명
+include ('dbConnect.php');
 
-// MySQL 데이터베이스 연결
-$conn = new mysqli($servername, $username, $password, $dbname);
+date_default_timezone_set('Asia/Seoul');
 
-// 연결 확인
-if ($conn->connect_error) {
-    die("MySQL 연결 실패: " . $conn->connect_error);
-}
 $title = $_POST['title'];
 $content = $_POST['content'];
+$userId = $_SESSION['id'];
+echo $userId;
+$created_at = date('Y-m-d H:i:s');
 
-$query = "insert into board(title,content) values('$title','$content')";
+$query = "insert into board(title,content,userId,created_at) values('$title','$content','$userId','$created_at')";
 
 
 if ($conn->query($query) === TRUE){
+    echo "<script>alert('작성되었습니다.')</script>";
     echo "<script>location.replace('board.php')</script>";
 }
 else {
