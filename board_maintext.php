@@ -28,10 +28,10 @@
 
 include ('topHeader.php');
 include ('dbConnect.php');
-
 $id = $_GET['id'];
+$currentURL = 'board_maintext.php?id='.$id;
 
-$query = "select title,content,userId,created_at from board where id = '$id'";
+$query = "select title,content,userId,created_at,file from board where id = '$id'";
 $res = mysqli_query($conn,$query);
 
 $row = mysqli_fetch_array($res);
@@ -44,7 +44,7 @@ $row = mysqli_fetch_array($res);
 </head>
 <body>
     <?php 
-    $que = "select count(*) as cnt from comment;"; 
+    $que = "select count(*) as cnt from comments;"; 
     $res1 = mysqli_query($conn,$que);
     $num = mysqli_fetch_assoc($res1);
     
@@ -62,6 +62,7 @@ $row = mysqli_fetch_array($res);
     if ($e_pageNum > $totalPage){
         $e_pageNum = $totalPage;
     }
+    echo $now_block;
     ?>
     <div id="a">
     <h1 style="width : auto">제목 : <?php echo $row[0]; ?></h1>
@@ -70,6 +71,8 @@ $row = mysqli_fetch_array($res);
     </div>
     <br>
     <h2>내용 : <?php echo $row[1]; ?></h2>
+    <h3>첨부파일 : </h3>
+    <a href="uploads/<?php echo $row['file'];?>"><?php echo $row['file'];?></a>
     <div id="control">
     <button onclick="location.href='content_delete.php?id=<?= $id ?>'">삭제하기</button>
     <button onclick="location.href='content_modify.php?id=<?= $id ?>'">수정하기</button>
@@ -88,7 +91,7 @@ $row = mysqli_fetch_array($res);
     <table>
         <?php 
         $start = ($page -1) * $listNum;
-        $sql = "select * from comment limit $start, $listNum;";
+        $sql = "select * from comments where contentId = $id limit $start, $listNum;";
         $res = mysqli_query($conn,$sql);
         $cnt = $start + 1; 
         while ($row = mysqli_fetch_assoc($res)){
@@ -96,34 +99,64 @@ $row = mysqli_fetch_array($res);
             <tr>
                 <td style="font-weight : bold;"><?= $row['userId']?></td>
                 <td><?= $row['created_at']?></td>
+                <?php
+                if ($_SESSION['id'] == $row['userId']){ ?>
+                    <td>
+                        <button onclick="location.href='comment_modify.php?id=<?= $row['id'] ?>&cid=<?=$id?>'">수정</button>
+                        <button onclick="location.href='comment_delete.php?id=<?= $row['id'] ?>&cid=<?=$id?>'">삭제</button>
+                    </td>
+                <?php } ?>
             </tr>
             <tr>
                 <td colspan="2"><?= $row['content']?></td>
             </tr>
         <?php } ?>
     </table>
+    <?php
+        function locateURL($a){
+            echo $a;
+            // $newArgument = 'aa=aa';
+            // // Check if there's already a query string in the URL
+            // if (strpos($currentURL, '?') !== false) {
+            //     // If a query string exists, append the new argument with '&'
+            //     $currentURL .= '&' . $newArgument;
+            // } else {
+            //     // If no query string exists, add the new argument with '?'
+            //     $currentURL .= '?' . $newArgument;
+            // }
+
+            // // Output the modified URL
+            // echo $currentURL;
+
+        }
+    ?>
+
+    
+
     <div id="button">
         <div id="LRButton">
             <?php
             if ($page <= 1){
             ?>
-                <button id="leftButton" type="button" onclick="location.href='board_maintext.php?id=1'"><</button>
+                <button id="leftButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=1'"><</button>
             <?php }else{ ?>
-                <button id="leftButton" type="button" onclick="location.href='board_maintext.php?page=<?php echo ($page-1); ?>'"><</button>
+                <button id="leftButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?=($page-1); ?>'"><</button>
             <?php } 
             for ($print_page = $s_pageNum; $print_page <= $e_pageNum; $print_page++){ ?>
-                <button id="page" onclick="location.href='board_maintext.php?page=<?php echo $print_page; ?>'"><?php echo $print_page; ?></button>
+                <button id="page" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?=$print_page; ?>'"><?=$print_page; ?></button>
             <?php }
             if ($page >= $totalPage) { ?>
-                <button id="rightButton" type="button" onclick="location.href='board_maintext.php?page=<?php echo $totalPage; ?>'">></button>
+                <button id="rightButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?php echo $totalPage; ?>'">></button>
             <?php }else{ ?>
-                <button id="rightButton" type="button" onclick="location.href='board_maintext.php?page=<?php echo ($page+1); ?>'">></button>
+                <button id="rightButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?php echo ($page+1); ?>'">></button>
             <?php } ?> 
             
         </div><br>
         <div id="b">
-        <textarea name="commentField" id="commentField" cols="30" rows="3"></textarea>
-        <button id="commentButton" type="button" onclick="location.href='comment_write.php?=<?= $id ?>'">댓글쓰기</button>
+        <form action="comment_write.php?id=<?= $id ?>" method="post">
+            <textarea name="commentField" id="commentField" cols="30" rows="3"></textarea>
+            <input type="submit" id="commentButton" value="댓글쓰기">
+        </form>
         </div>
 </div>
 </body>

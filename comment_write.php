@@ -2,16 +2,14 @@
 include ('dbConnect.php');
 
 $id = $_GET['id'];
+$sesId = $_SESSION['id'];
+$content = $_POST['commentField'];
 
-$query1 = "delete from board where id = '$id';";
-$query2 = "set @count = 0;";
-$query3 = "update board set id = @count:=@count+1;";
-$query4 = "alter table board auto_increment=1;";
+$query = "insert into comments (contentId,userId,content) values ($id,'$sesId','$content')";
 
 
-if ($conn->query($query1) && $conn->query($query2) && $conn->query($query3) && $conn->query($query4) === TRUE){
-  echo "<script>alert('삭제되었습니다.')</script>";
-  echo "<script>location.replace('board.php')</script>";
+if ($conn->query($query)){
+  echo "<script>location.replace('board_maintext.php?id=$id')</script>";
 }
 else {
     echo "데이터 삭제 실패: " . $conn->error;
