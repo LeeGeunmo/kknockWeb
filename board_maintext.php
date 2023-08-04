@@ -44,7 +44,7 @@ $row = mysqli_fetch_array($res);
 </head>
 <body>
     <?php 
-    $que = "select count(*) as cnt from comments;"; 
+    $que = "select count(*) as cnt from comments where contentId = $id;"; 
     $res1 = mysqli_query($conn,$que);
     $num = mysqli_fetch_assoc($res1);
     
@@ -62,7 +62,6 @@ $row = mysqli_fetch_array($res);
     if ($e_pageNum > $totalPage){
         $e_pageNum = $totalPage;
     }
-    echo $now_block;
     ?>
     <div id="a">
     <h1 style="width : auto">제목 : <?php echo $row[0]; ?></h1>
@@ -112,44 +111,32 @@ $row = mysqli_fetch_array($res);
             </tr>
         <?php } ?>
     </table>
-    <?php
-        function locateURL($a){
-            echo $a;
-            // $newArgument = 'aa=aa';
-            // // Check if there's already a query string in the URL
-            // if (strpos($currentURL, '?') !== false) {
-            //     // If a query string exists, append the new argument with '&'
-            //     $currentURL .= '&' . $newArgument;
-            // } else {
-            //     // If no query string exists, add the new argument with '?'
-            //     $currentURL .= '?' . $newArgument;
-            // }
-
-            // // Output the modified URL
-            // echo $currentURL;
-
-        }
-    ?>
-
     
 
     <div id="button">
         <div id="LRButton">
             <?php
-            if ($page <= 1){
-            ?>
-                <button id="leftButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=1'"><</button>
-            <?php }else{ ?>
-                <button id="leftButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?=($page-1); ?>'"><</button>
-            <?php } 
+            if ($num['cnt'] != 0){
+                if ($page <= 1){
+                    ?>
+                    <button id="leftButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=1'"><</button>
+                    <?php }
+                else{ ?>
+                    <button id="leftButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?=($page-1); ?>'"><</button>
+                    <?php }
+            }
+             
             for ($print_page = $s_pageNum; $print_page <= $e_pageNum; $print_page++){ ?>
                 <button id="page" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?=$print_page; ?>'"><?=$print_page; ?></button>
             <?php }
-            if ($page >= $totalPage) { ?>
-                <button id="rightButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?php echo $totalPage; ?>'">></button>
-            <?php }else{ ?>
-                <button id="rightButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?php echo ($page+1); ?>'">></button>
-            <?php } ?> 
+            if ($num['cnt'] != 0){
+                if ($page >= $totalPage) { ?>
+                    <button id="rightButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?php echo $totalPage; ?>'">></button>
+                <?php }else{ ?>
+                    <button id="rightButton" type="button" onclick="location.href='board_maintext.php?id=<?=$id;?>&page=<?php echo ($page+1); ?>'">></button>
+                <?php } 
+            } ?>
+            
             
         </div><br>
         <div id="b">

@@ -225,7 +225,12 @@ $cnt = $start + 1;
         foreach ($data as $row){ ?>
             <tr onclick="window.location.href='board_maintext.php?id=<?= $row['id'] ?>'" style="cursor:pointer;">
                     <td><?=$num?></td>
-                    <td><?=$row['title']?></td>
+                    <?php
+                        $cQuery = "select COUNT(*) AS comment_count FROM comments WHERE contentId = {$row['id']};";
+                        $res3 = mysqli_query($conn,$cQuery);
+                        $row1 = mysqli_fetch_assoc($res3);
+                    ?>
+                    <td><?=$row['title']?> [<?=$row1['comment_count'];?>]</td>
                     <td><?=$row['userId']?></td>
                     <td><?=$row['created_at']?></td>
             </tr>
