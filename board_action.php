@@ -9,6 +9,9 @@ $content = $_POST['content'];
 $userId = $_SESSION['id'];
 $created_at = date('Y-m-d H:i:s');
 if (empty($title) || empty($content)) {
+    echo "제목과 내용을 입력해야 합니다.";
+}
+else {
     if (isset($_FILES['upload_file']) && $_FILES['upload_file']['error'] === UPLOAD_ERR_OK){
         $targetDir = "uploads/"; // Directory where you want to store the uploaded files
         $targetFile = $targetDir . basename($_FILES['upload_file']["name"]);
@@ -55,9 +58,6 @@ if (empty($title) || empty($content)) {
     else {
         echo "데이터 저장 실패: " . $conn->error;
     }
-}
-else {
-    echo "제목과 내용을 입력해야 합니다.";
 }
 
 
