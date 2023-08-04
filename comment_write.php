@@ -1,5 +1,6 @@
 <?php
 include ('dbConnect.php');
+session_start();
 
 $id = $_GET['id'];
 $sesId = $_SESSION['id'];

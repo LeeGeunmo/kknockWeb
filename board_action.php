@@ -2,6 +2,7 @@
 include ('dbConnect.php');
 
 date_default_timezone_set('Asia/Seoul');
+session_start();
 
 $title = $_POST['title'];
 $content = $_POST['content'];

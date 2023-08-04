@@ -64,6 +64,7 @@
 <?php
 include ('topHeader.php');
 include ('dbConnect.php');
+session_start();
 $listNum = 5;
 $page = isset($_GET['page'])? ($_GET['page']) : 1;
 $start = ($page -1) * $listNum;
