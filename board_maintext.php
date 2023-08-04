@@ -25,7 +25,8 @@
 </body>
 </html>
 <?php
-
+session_start();
+print_r($_SESSION);
 include ('topHeader.php');
 include ('dbConnect.php');
 $id = $_GET['id'];
