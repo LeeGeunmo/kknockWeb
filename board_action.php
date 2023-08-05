@@ -8,6 +8,7 @@ $title = $_POST['title'];
 $content = $_POST['content'];
 $userId = $_SESSION['id'];
 $created_at = date('Y-m-d H:i:s');
+$check = false;
 if (empty($title) || empty($content)) {
     echo "제목과 내용을 입력해야 합니다.";
 }
@@ -30,7 +31,8 @@ else {
             echo "Sorry, your file was not uploaded.";
         } else {
             if (move_uploaded_file($_FILES["upload_file"]["tmp_name"], $targetFile)) {
-                echo "The file " . basename($_FILES["upload_file"]["name"]) . " has been uploaded.";
+                $check = true;
+
                 // Here, you can save the file information and other details to your database, if required.
                 // For example, you can store the file name, user ID, timestamp, etc. in the forum database.
             } else {
@@ -52,8 +54,13 @@ else {
     
     
     if ($conn->query($query) === TRUE){
+        if ($check){
         echo "<script>alert('작성되었습니다.')</script>";
-        //echo "<script>location.replace('board.php')</script>";
+        echo "<script>location.replace('board.php')</script>";
+        }
+        else {
+            echo "데이터 저장 실패: " . $conn->error;
+        }
     }
     else {
         echo "데이터 저장 실패: " . $conn->error;
