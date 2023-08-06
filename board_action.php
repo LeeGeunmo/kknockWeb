@@ -58,9 +58,6 @@ else {
         echo "<script>alert('작성되었습니다.')</script>";
         echo "<script>location.replace('board.php')</script>";
     }
-    else {
-        echo "데이터 저장 실패: " . $conn->error;
-    }
 
 
     
