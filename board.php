@@ -65,6 +65,18 @@
 include ('topHeader.php');
 include ('dbConnect.php');
 session_start();
+
+function sanitizeInput($input)
+{
+    // Remove leading and trailing whitespace
+    $trimmedInput = trim($input);
+    
+    // Convert special characters to HTML entities
+    $sanitizedInput = htmlspecialchars($trimmedInput, ENT_QUOTES, 'UTF-8');
+    
+    return $sanitizedInput;
+}
+
 $listNum = 5;
 $page = isset($_GET['page'])? ($_GET['page']) : 1;
 $start = ($page -1) * $listNum;
@@ -231,8 +243,8 @@ $cnt = $start + 1;
                         $res3 = mysqli_query($conn,$cQuery);
                         $row1 = mysqli_fetch_assoc($res3);
                     ?>
-                    <td><?=$row['title']?> [<?=$row1['comment_count'];?>]</td>
-                    <td><?=$row['userId']?></td>
+                    <td><?=sanitizeInput($row['title'])?> [<?=$row1['comment_count'];?>]</td>
+                    <td><?=sanitizeInput($row['userId'])?></td>
                     <td><?=$row['created_at']?></td>
             </tr>
         <?php $num++; } 

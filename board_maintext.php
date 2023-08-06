@@ -28,6 +28,17 @@
 session_start();
 include ('topHeader.php');
 include ('dbConnect.php');
+function sanitizeInput($input)
+{
+    // Remove leading and trailing whitespace
+    $trimmedInput = trim($input);
+    
+    // Convert special characters to HTML entities
+    $sanitizedInput = htmlspecialchars($trimmedInput, ENT_QUOTES, 'UTF-8');
+    
+    return $sanitizedInput;
+}
+
 $id = $_GET['id'];
 $currentURL = 'board_maintext.php?id='.$id;
 
@@ -64,14 +75,14 @@ $row = mysqli_fetch_array($res);
     }
     ?>
     <div id="a">
-    <h1 style="width : auto">제목 : <?php echo $row[0]; ?></h1>
-    <h3>글쓴이 : <?php echo $row[2] ?></h3>
+    <h1 style="width : auto">제목 : <?php echo sanitizeInput($row[0]); ?></h1>
+    <h3>글쓴이 : <?php echo sanitizeInput($row[2]) ?></h3>
     <h3>작성일 : <?php echo $row[3] ?></h3>
     </div>
     <br>
-    <h2>내용 : <?php echo $row[1]; ?></h2>
+    <h2>내용 : <?php echo sanitizeInput($row[1]); ?></h2>
     <h3>첨부파일 : </h3>
-    <a href="uploads/<?php echo $row['file'];?>"><?php echo $row['file'];?></a>
+    <a href="uploads/<?php echo $row['file'];?>"><?php echo sanitizeInput($row['file']);?></a>
     <div id="control">
     <button onclick="location.href='content_delete.php?id=<?= $id ?>'">삭제하기</button>
     <button onclick="location.href='content_modify.php?id=<?= $id ?>'">수정하기</button>
@@ -96,7 +107,7 @@ $row = mysqli_fetch_array($res);
         while ($row = mysqli_fetch_assoc($res)){
         ?>
             <tr>
-                <td style="font-weight : bold;"><?= $row['userId']?></td>
+                <td style="font-weight : bold;"><?= sanitizeInput($row['userId'])?></td>
                 <td><?= $row['created_at']?></td>
                 <?php
                 if ($_SESSION['id'] == $row['userId']){ ?>
@@ -107,7 +118,7 @@ $row = mysqli_fetch_array($res);
                 <?php } ?>
             </tr>
             <tr>
-                <td colspan="2"><?= $row['content']?></td>
+                <td colspan="2"><?= sanitizeInput($row['content'])?></td>
             </tr>
         <?php } ?>
     </table>
