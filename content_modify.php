@@ -1,4 +1,5 @@
 <?php
+session_start();
 include ('topHeader.php');
 include ('dbConnect.php');
 
