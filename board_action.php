@@ -43,10 +43,10 @@ else {
     }
     
     
-    
-    if (isset($_FILES['upload_file']) && $_FILES['upload_file']['error'] === UPLOAD_ERR_OK){
+    if ($check == 'l'){
         $fName = $_FILES['upload_file']["name"];
         $query = "insert into board(title,content,userId,created_at,file) values('$title','$content','$userId','$created_at','$fName')";
+        $check = '';
     }
     else {
         $query = "insert into board(title,content,userId,created_at) values('$title','$content','$userId','$created_at')";
