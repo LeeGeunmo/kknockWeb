@@ -4,18 +4,16 @@ include ('dbConnect.php');
 
 $id = $_GET['id'];
 
-
-
-
 $query = "select * from board where id = '$id';";
 $res = mysqli_query($conn,$query);
 $row = mysqli_fetch_array($res);
 
-// echo $_SESSION['id']; echo "<br>";
-// echo $row['id']
+echo $_SESSION['id']; echo "<br>";
+echo $row['userId']; echo "<br>";
+
 if ($_SESSION['id'] != $row['userId']){
     echo "<script>alert('비정상적인 접근입니다.');</script>";
-    echo "<script>location.replace('board.php');</script>";
+    //echo "<script>location.replace('board.php');</script>";
 }
 ?>
 <!DOCTYPE html>
